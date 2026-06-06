@@ -13,11 +13,6 @@
     <!-- reCAPTCHA -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
-    
     <!-- CSS customizado -->
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -148,6 +143,12 @@
     </main>
 
     <!-- Scripts -->
+    <!-- Firebase SDK (defer para não bloquear) -->
+    <script defer src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
+    
+    <!-- Configuração e lógica -->
     <script src="firebase-config.js"></script>
     <script src="script.js"></script>
 </body>
