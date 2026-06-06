@@ -3,6 +3,10 @@
         "/^git add \\. && git commit -m \"Initial commit: Criar tela de cadastro com Material UI e Firebase\"$/": {
             "approve": true,
             "matchCommandLine": true
+        },
+        "/^git push -u origin main$/": {
+            "approve": true,
+            "matchCommandLine": true
         }
     }
 }
