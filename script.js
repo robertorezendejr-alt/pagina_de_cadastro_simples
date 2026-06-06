@@ -27,16 +27,26 @@ const errors = {
 
 const submitBtn = document.querySelector('.btn-submit');
 
-// Verificar se Firebase está inicializado
+// Verificar se Firebase está inicializado - Versão melhorada
 let firebaseReady = false;
-setTimeout(() => {
-    if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
+
+function checkFirebaseReady() {
+    return typeof firebase !== 'undefined' && firebase.apps.length > 0;
+}
+
+// Tenta verificar a cada 100ms por até 5 segundos
+let attempts = 0;
+const checkInterval = setInterval(() => {
+    if (checkFirebaseReady()) {
         firebaseReady = true;
         console.log('✅ Firebase disponível!');
-    } else {
-        console.warn('⚠️ Firebase não inicializado. Verifique firebase-config.js');
+        clearInterval(checkInterval);
+    } else if (attempts >= 50) { // 50 * 100ms = 5 segundos
+        console.warn('⚠️ Firebase não inicializado após 5 segundos');
+        clearInterval(checkInterval);
     }
-}, 1000);
+    attempts++;
+}, 100);
 
 /**
  * Validação de campos individuais
@@ -231,9 +241,10 @@ form.addEventListener('submit', async (e) => {
         return;
     }
 
-    // Verifica se Firebase está pronto
-    if (!firebaseReady) {
-        showError('recaptcha', 'Firebase não está configurado. Verifique firebase-config.js');
+    // Verifica se Firebase está pronto - VERIFICA NOVAMENTE
+    if (!checkFirebaseReady()) {
+        console.warn('Firebase não está disponível. Aguardando...');
+        showError('recaptcha', 'Firebase está carregando... Tente novamente em alguns segundos');
         return;
     }
 
