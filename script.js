@@ -34,16 +34,27 @@ function checkFirebaseReady() {
     return typeof firebase !== 'undefined' && firebase.apps.length > 0;
 }
 
-// Tenta verificar a cada 100ms por até 5 segundos
+// Desabilita o botão inicialmente
+submitBtn.disabled = true;
+submitBtn.innerHTML = '<span class="spinner"></span><span class="btn-text">Carregando Firebase...</span>';
+
+// Tenta verificar a cada 100ms por até 10 segundos
 let attempts = 0;
 const checkInterval = setInterval(() => {
     if (checkFirebaseReady()) {
         firebaseReady = true;
         console.log('✅ Firebase disponível!');
         clearInterval(checkInterval);
-    } else if (attempts >= 50) { // 50 * 100ms = 5 segundos
-        console.warn('⚠️ Firebase não inicializado após 5 segundos');
+        // Habilita o botão
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Criar Conta';
+        console.log('✅ Botão habilitado!');
+    } else if (attempts >= 100) { // 100 * 100ms = 10 segundos
+        console.warn('⚠️ Firebase não inicializado após 10 segundos');
         clearInterval(checkInterval);
+        // Habilita o botão mesmo assim para permitir retry
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Criar Conta (Retry)';
     }
     attempts++;
 }, 100);
