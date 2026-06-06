@@ -26,13 +26,18 @@
  */
 
 // ⬇️ SUBSTITUA PELOS SEUS VALORES DO FIREBASE ⬇️
+
+/**
+ * CONFIGURAÇÃO DO FIREBASE - SUAS CREDENCIAIS
+ */
+
 const firebaseConfig = {
-    apiKey: "SUA_API_KEY_AQUI",
-    authDomain: "seu-projeto.firebaseapp.com",
-    projectId: "seu-projeto-id",
-    storageBucket: "seu-projeto.appspot.com",
-    messagingSenderId: "seu-messaging-sender-id",
-    appId: "seu-app-id"
+  apiKey: "AIzaSyCIzPWiKjJiDk2EGubtJoOrWk5SmTkGvYo",
+  authDomain: "tela-cadastro-77959.firebaseapp.com",
+  projectId: "tela-cadastro-77959",
+  storageBucket: "tela-cadastro-77959.firebasestorage.app",
+  messagingSenderId: "881419833650",
+  appId: "1:881419833650:web:f004aa19b97d830b68872b"
 };
 
 // Inicializa Firebase
