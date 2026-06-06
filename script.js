@@ -252,23 +252,42 @@ form.addEventListener('submit', async (e) => {
         return;
     }
 
-    // Verifica se Firebase está pronto - VERIFICA NOVAMENTE
-    if (!checkFirebaseReady()) {
-        console.warn('Firebase não está disponível. Aguardando...');
-        showError('recaptcha', 'Firebase está carregando... Tente novamente em alguns segundos');
-        return;
-    }
-
     // Desabilita o botão e mostra loading
     submitBtn.disabled = true;
     const originalText = submitBtn.innerHTML;
-    submitBtn.innerHTML = '<span class="spinner"></span><span class="btn-text">Criando conta...</span>';
+    submitBtn.innerHTML = '<span class="spinner"></span><span class="btn-text">Preparando...</span>';
+
+    // Aguarda Firebase estar pronto (com retry)
+    let firebaseOk = false;
+    let retryCount = 0;
+    const maxRetries = 100; // 100 * 100ms = 10 segundos
+    
+    while (!firebaseOk && retryCount < maxRetries) {
+        if (checkFirebaseReady()) {
+            firebaseOk = true;
+            break;
+        }
+        // Aguarda 100ms e tenta novamente
+        await new Promise(resolve => setTimeout(resolve, 100));
+        retryCount++;
+    }
+
+    if (!firebaseOk) {
+        console.error('Firebase não inicializou após 10 segundos');
+        showError('recaptcha', 'Erro: Firebase não carregou. Recarregue a página e tente novamente.');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+        return;
+    }
 
     try {
         const email = inputs.email.value;
         const senha = inputs.senha.value;
         const nome = inputs.nome.value;
         const telefone = inputs.telefone.value;
+
+        // Atualiza status do botão
+        submitBtn.innerHTML = '<span class="spinner"></span><span class="btn-text">Criando conta...</span>';
 
         // 1. Cria o usuário no Firebase Auth
         console.log('📝 Criando usuário no Firebase...');
