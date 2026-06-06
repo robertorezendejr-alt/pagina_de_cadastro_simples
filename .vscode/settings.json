@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^git add \\. && git commit -m \"Initial commit: Criar tela de cadastro com Material UI e Firebase\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}
