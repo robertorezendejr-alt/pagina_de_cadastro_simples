@@ -40,14 +40,27 @@ const firebaseConfig = {
   appId: "1:881419833650:web:f004aa19b97d830b68872b"
 };
 
-// Inicializa Firebase
-try {
-    firebase.initializeApp(firebaseConfig);
-    console.log('✅ Firebase inicializado com sucesso!');
-} catch (error) {
-    console.error('❌ Erro ao inicializar Firebase:', error);
-    console.error('Verifique se as credenciais em firebase-config.js estão corretas');
+// Inicializa Firebase - Aguarda o SDK estar pronto
+function initializeFirebase() {
+    if (typeof firebase === 'undefined') {
+        console.warn('⏳ Firebase SDK ainda não carregou, aguardando...');
+        setTimeout(initializeFirebase, 100);
+        return;
+    }
+
+    try {
+        if (firebase.apps.length === 0) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        console.log('✅ Firebase inicializado com sucesso!');
+    } catch (error) {
+        console.error('❌ Erro ao inicializar Firebase:', error);
+        console.error('Verifique se as credenciais em firebase-config.js estão corretas');
+    }
 }
+
+// Chama a inicialização
+initializeFirebase();
 
 // Define regras de segurança do Firestore (TESTE APENAS - mude em produção!)
 // Quando criar o Firestore Database, use essas regras na aba "Regras":
