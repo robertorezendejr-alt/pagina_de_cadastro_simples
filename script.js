@@ -260,12 +260,21 @@ form.addEventListener('submit', async (e) => {
     // Aguarda Firebase estar pronto (com retry)
     let firebaseOk = false;
     let retryCount = 0;
-    const maxRetries = 100; // 100 * 100ms = 10 segundos
+    const maxRetries = 300; // 300 * 100ms = 30 segundos
+    
+    console.log('⏳ Aguardando Firebase ficar pronto...');
     
     while (!firebaseOk && retryCount < maxRetries) {
         if (checkFirebaseReady()) {
             firebaseOk = true;
+            console.log('✅ Firebase pronto! Prosseguindo...');
             break;
+        }
+        // Atualiza status a cada 5 segundos
+        if (retryCount % 50 === 0 && retryCount > 0) {
+            const segundos = Math.floor(retryCount / 10);
+            console.log(`⏳ Ainda aguardando Firebase... ${segundos}s`);
+            submitBtn.innerHTML = `<span class="spinner"></span><span class="btn-text">Preparando... ${segundos}s</span>`;
         }
         // Aguarda 100ms e tenta novamente
         await new Promise(resolve => setTimeout(resolve, 100));
@@ -273,10 +282,10 @@ form.addEventListener('submit', async (e) => {
     }
 
     if (!firebaseOk) {
-        console.error('Firebase não inicializou após 10 segundos');
-        showError('recaptcha', 'Erro: Firebase não carregou. Recarregue a página e tente novamente.');
+        console.error(`❌ Firebase não inicializou após 30 segundos (${retryCount} tentativas)`);
+        showError('recaptcha', 'Erro: Firebase não carregou após 30 segundos. Recarregue a página e tente novamente.');
         submitBtn.disabled = false;
-        submitBtn.innerHTML = originalText;
+        submitBtn.innerHTML = 'Criar Conta (Retry)';
         return;
     }
 
