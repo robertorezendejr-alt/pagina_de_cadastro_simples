@@ -49,10 +49,6 @@ try {
     console.error('Verifique se as credenciais em firebase-config.js estão corretas');
 }
 
-// Inicializa Auth e Firestore
-const auth = firebase.auth();
-const db = firebase.firestore();
-
 // Define regras de segurança do Firestore (TESTE APENAS - mude em produção!)
 // Quando criar o Firestore Database, use essas regras na aba "Regras":
 /*
